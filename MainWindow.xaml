@@ -1,0 +1,182 @@
+﻿<Window x:Class="ModernWpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:comp="clr-namespace:ModernWpfApp.Components.Order.OrderRow"
+        Title="Modern WPF App"
+        Height="600"
+        Width="1000"
+        Background="#F0F2F5"
+        PreviewMouseDown="Window_PreviewMouseDown">
+
+    <Window.Resources>
+        <!-- Modern DataGrid Header Style -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"
+                    Value="#F8FAFC"/>
+            <Setter Property="Foreground"
+                    Value="#64748B"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+            <Setter Property="Padding"
+                    Value="10,12"/>
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,1"/>
+            <Setter Property="BorderBrush"
+                    Value="#E2E8F0"/>
+        </Style>
+
+        <!-- Modern DataGrid Row Style -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background"
+                    Value="White"/>
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="Margin"
+                    Value="0,2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#F1F5F9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern DataGrid Cell Style -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="Padding"
+                    Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+            <!-- Skeleton Loader -->
+            <Grid Visibility="{Binding FinishLoading, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=False}">
+                <Rectangle Width="250"
+                           Height="60"
+                           Fill="#DDD"
+                           RadiusX="6"
+                           RadiusY="6"/>
+            </Grid>
+
+            <!-- Login Button -->
+            <Button x:Name="BtnLogin"
+                    Content="Open Login Window"
+                    Style="{StaticResource ModernButton}"
+                    Width="250"
+                    Height="60"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Click="OpenLogin_Click"
+                    Visibility="{Binding FinishLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!-- Orders Table -->
+            <DataGrid x:Name="OrdersGrid"
+                      ItemsSource="{Binding Orders}"
+                      AutoGenerateColumns="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="False"
+                      HeadersVisibility="Column"
+                      CanUserAddRows="False"
+                      RowHeight="60"
+                      Background="Transparent"
+                      Margin="20"
+                      IsReadOnly="True"
+                      Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Order ID"
+                                        Binding="{Binding Id}"
+                                        Width="100"/>
+                    <DataGridTextColumn Header="User"
+                                        Binding="{Binding User.Name}"
+                                        Width="200"/>
+                    <DataGridTextColumn Header="Furniture Ordered"
+                                        Binding="{Binding FurnitureSummary}"
+                                        Width="150"/>
+                    <DataGridTextColumn Header="Address"
+                                        Binding="{Binding Address}"
+                                        Width="*"/>
+                    <DataGridTextColumn Header="Created At"
+                                        Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}"
+                                        Width="150"/>
+                    <DataGridTemplateColumn Header="Actions"
+                            Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                    <Button Content="Cancel"
+                                            Width="80"
+                                            Margin="0,0,5,0"
+                                            Style="{StaticResource ModernButton}"
+                                            Command="{Binding CancelCommand}"/>
+                                    <Button Content="Complete"
+                                            Width="80"
+                                            Style="{StaticResource ModernButton}"
+                                            Command="{Binding CompleteCommand}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
+
+        <!-- Avatar and dropdown menu -->
+        <Grid>
+            <Border x:Name="AvatarButton"
+                    Width="70"
+                    Height="70"
+                    CornerRadius="35"
+                    Background="#0078D7"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,20,20,0"
+                    MouseLeftButtonDown="Avatar_Click"
+                    Cursor="Hand">
+                <TextBlock x:Name="TxtAvatarLetter"
+                           Foreground="White"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Border>
+
+            <Border x:Name="DropdownMenu"
+                    Background="White"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="10"
+                    Width="150"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,100,20,0"
+                    Visibility="Collapsed">
+                <StackPanel>
+                    <Button Content="Logout"
+                            Click="Logout_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

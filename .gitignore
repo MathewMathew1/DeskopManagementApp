@@ -1,0 +1,61 @@
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio temporary files
+.vs/
+.vscode/
+
+# Rider IDE files
+.idea/
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+*.nuspec
+
+# .NET Core / SDK files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Publish outputs
+*.publish.xml
+publish/
+
+# Resharper / JetBrains
+_ReSharper*/
+*.DotSettings.user
+
+# Rider IDE caches
+.idea/
+
+# Others
+*.dbmdl
+*.psess
+*.vsp
+*.vspscc
+*.vssscc
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Auto-generated WPF files
+*.g.cs
+*.g.i.cs
+*.i.cs
+
+# App-specific secrets or config overrides
+appsettings.*.json
+*.local.json

@@ -1,0 +1,21 @@
+<Window x:Class="ModernWpfApp.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Login" Height="350" Width="300"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="ToolWindow"
+        Background="#F9F9F9">
+    
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <TextBlock Text="Login" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Username" Foreground="#555" Margin="0,0,0,5"/>
+        <TextBox x:Name="TxtUsername" Padding="8" Margin="0,0,0,15" />
+
+        <TextBlock Text="Password" Foreground="#555" Margin="0,0,0,5"/>
+        <PasswordBox x:Name="TxtPassword" Padding="8" Margin="0,0,0,5" />
+        <TextBlock x:Name="TxtError" Foreground="Red" TextWrapping="Wrap" Margin="0,0,0,15" MinHeight="16" />
+        <Button Content="{Binding ButtonText}" 
+                Style="{StaticResource ModernButton}" 
+                Command="{Binding LoginCommand}" />
+    </StackPanel>
+</Window>
