@@ -12,6 +12,9 @@ namespace ModernWpfApp
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        // Expose the singleton so XAML can bind to Connection.IsConnected
+        public ConnectionService Connection => ConnectionService.Instance;
+
         private bool _finishLoading = false;
         public bool FinishLoading
         {
@@ -26,32 +29,38 @@ namespace ModernWpfApp
             set { _isUserLoggedIn = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsUserLoggedIn))); }
         }
 
+        // Dummy list to prevent errors if OrdersStore isn't fully set up yet
         public ObservableCollection<OrderData> Orders => OrdersStore.Instance.Orders;
 
         public MainWindow()
         {
-
             InitializeComponent();
-
             DataContext = this;
 
-            // Check if user is already logged in
             Loaded += async (_, __) =>
             {
+                // Wait for your services
                 bool hasUser = await CurrentUserService.Instance.FetchCurrentUserAsync();
                 FinishLoading = true;
 
                 if (hasUser)
                 {
                      IsUserLoggedIn = true;
-                    ShowAvatar();
-                    await OrdersStore.Instance.FetchPendingOrdersAsync();
+                     ShowAvatar();
+                     await OrdersStore.Instance.FetchPendingOrdersAsync();
                 }
                 else
                 {
                     ShowLoginButton();
                 }
             };
+        }
+
+        // --- NEW: Open Connection Window ---
+        private void OpenConnection_Click(object sender, RoutedEventArgs e)
+        {
+            var connWindow = new ConnectionWindow { Owner = this };
+            connWindow.ShowDialog();
         }
 
         private void OpenLogin_Click(object sender, RoutedEventArgs e)
@@ -61,6 +70,7 @@ namespace ModernWpfApp
 
             if (result == true && CurrentUserService.Instance.User != null)
             {
+                IsUserLoggedIn = true;
                 ShowAvatar();
             }
         }
@@ -68,8 +78,8 @@ namespace ModernWpfApp
         private void ShowLoginButton()
         {
             BtnLogin.Visibility = Visibility.Visible;
-            AvatarButton.Visibility = Visibility.Collapsed; // changed from AvatarContainer
-            DropdownMenu.Visibility = Visibility.Collapsed; // hide dropdown as well
+            AvatarButton.Visibility = Visibility.Collapsed;
+            DropdownMenu.Visibility = Visibility.Collapsed;
         }
 
         private void ShowAvatar()
@@ -91,10 +101,10 @@ namespace ModernWpfApp
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             CurrentUserService.Instance.Logout();
+            IsUserLoggedIn = false;
             ShowLoginButton();
         }
 
-        // Close dropdown if click outside
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (DropdownMenu.Visibility == Visibility.Visible &&

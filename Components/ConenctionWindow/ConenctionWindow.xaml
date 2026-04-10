@@ -1,0 +1,29 @@
+<Window x:Class="ModernWpfApp.ConnectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Database Connection" Height="380" Width="350"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" WindowStyle="ToolWindow"
+        Background="#F9F9F9">
+
+    <StackPanel Margin="20" VerticalAlignment="Center">
+        <TextBlock Text="Database Setup" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Connection String (e.g. Access/SQL)" Foreground="#555" Margin="0,0,0,5"/>
+        <TextBox x:Name="TxtConnectionString" TextWrapping="Wrap" AcceptsReturn="True" Height="60" Padding="8" Margin="0,0,0,10" />
+
+        <!-- Error Message Block -->
+        <TextBlock x:Name="TxtError" Foreground="Red" TextWrapping="Wrap" Margin="0,0,0,15" MinHeight="16" />
+
+        <!-- Action Buttons -->
+        <Button Content="{Binding ConnectButtonText}" 
+                Style="{StaticResource ModernButton}" 
+                Command="{Binding ConnectCommand}" 
+                Margin="0,0,0,10"/>
+
+        <!-- Disconnect Button (Red) -->
+        <Button Content="Disconnect &amp; Clear" 
+                Style="{StaticResource ModernButton}" 
+                Background="#EF4444"
+                Click="Disconnect_Click" />
+    </StackPanel>
+</Window>

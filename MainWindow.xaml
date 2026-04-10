@@ -118,11 +118,11 @@
                                         Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}"
                                         Width="150"/>
                     <DataGridTemplateColumn Header="Actions"
-                            Width="200">
+                                            Width="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Right">
+                                            HorizontalAlignment="Right">
                                     <Button Content="Cancel"
                                             Width="80"
                                             Margin="0,0,5,0"
@@ -143,7 +143,58 @@
 
         <!-- Avatar and dropdown menu -->
         <Grid>
-            <Border x:Name="AvatarButton"
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,20,20,0">
+
+                <!-- Connection Setup Button (Shows when NOT connected) -->
+                <Button Content="Setup Connection"
+                        Background="#F59E0B"
+                        Height="40"
+                        Margin="0,0,15,0"
+                        VerticalAlignment="Center"
+                        Click="OpenConnection_Click">
+                    <Button.Style>
+                        <Style TargetType="Button"
+                                BasedOn="{StaticResource ModernButton}">
+                            <Setter Property="Visibility"
+                                    Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Connection.IsConnected}"
+                                        Value="True">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Connected Text (Shows when connected) -->
+                <TextBlock Text="🟢 Connected"
+                           Foreground="#10B981"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,0,15,0"
+                           Cursor="Hand"
+                           MouseLeftButtonDown="OpenConnection_Click">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Connection.IsConnected}"
+                                        Value="True">
+                                    <Setter Property="Visibility"
+                                            Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+              <Border x:Name="AvatarButton"
                     Width="70"
                     Height="70"
                     CornerRadius="35"
@@ -177,6 +228,9 @@
                             Click="Logout_Click"/>
                 </StackPanel>
             </Border>
+           
+            </StackPanel>
+          
         </Grid>
     </Grid>
 </Window>
