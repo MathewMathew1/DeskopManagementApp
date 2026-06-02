@@ -2,10 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:comp="clr-namespace:ModernWpfApp.Components.Order.OrderRow"
-        Title="Modern WPF App"
+        Title="Menu - zamówienia online"
         Height="600"
         Width="1000"
         Background="#F0F2F5"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
         PreviewMouseDown="Window_PreviewMouseDown">
 
     <Window.Resources>
@@ -87,6 +88,43 @@
                     Visibility="{Binding FinishLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
             <!-- Orders Table -->
+
+
+            <Button x:Name="NewOrders"
+                    Content="Nowe zamówienia"
+                    Style="{StaticResource ModernButton}"
+                    Width="250"
+                    Height="60"
+                    Margin="0,5,0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Click="NewOrders_Click"
+                    Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <Button x:Name="ListOfOrder"
+                    Content="Lista zamówień"
+                    Style="{StaticResource ModernButton}"
+                    Width="250"
+                    Height="60"
+                    Margin="0,5,0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Click="ListOfOrder_Click"
+                    Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <Button x:Name="UpdateData"
+                    Content="Aktualizacja danych"
+                    Style="{StaticResource ModernButton}"
+                    Width="250"
+                    Margin="0,5,0,5"
+                    Height="60"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Click="UpdateData_Click"
+                    Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+            <!--
             <DataGrid x:Name="OrdersGrid"
                       ItemsSource="{Binding Orders}"
                       AutoGenerateColumns="False"
@@ -137,8 +175,8 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-            </DataGrid>
-
+            </DataGrid> -->
+                
         </StackPanel>
 
         <!-- Avatar and dropdown menu -->
@@ -148,8 +186,12 @@
                     VerticalAlignment="Top"
                     Margin="0,20,20,0">
 
+        <!--    <Button Content="Update Detale Ślizgaze" 
+                    Style="{StaticResource ModernButton}" 
+                    Margin="0,0,0,10"
+                    Click="OnUpdateSlizgacze_Click" /> -->
                 <!-- Connection Setup Button (Shows when NOT connected) -->
-                <Button Content="Setup Connection"
+            <!--    <Button Content="Setup Connection"
                         Background="#F59E0B"
                         Height="40"
                         Margin="0,0,15,0"
@@ -169,32 +211,42 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                </Button>
-
+                </Button> -->
                 <!-- Connected Text (Shows when connected) -->
-                <TextBlock Text="🟢 Connected"
-                           Foreground="#10B981"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,15,0"
-                           Cursor="Hand"
-                           MouseLeftButtonDown="OpenConnection_Click">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Visibility"
-                                    Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Connection.IsConnected}"
-                                        Value="True">
-                                    <Setter Property="Visibility"
-                                            Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                        <Ellipse Margin="0,0,5,0" Width="20" Height="20" Fill="{Binding Connection.lConnectionColor}"/>
+                        <TextBlock Text="Serwer lokalny"
+                                Foreground="{Binding Connection.lConnectionColor}"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="0,0,15,0"
+                                Cursor="Hand"
+                                MouseLeftButtonDown="OpenConnection_Click">
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                        <Ellipse Margin="0,0,5,0" Width="20" Height="20" Fill="{Binding CurrentUserService.lConnectionColor}"/>
+                        <TextBlock Text="Serwer internetowy"
+                                Foreground="{Binding CurrentUserService.lConnectionColor}"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="0,0,15,0"
+                                Cursor="Hand">
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="LoginStackPanel" Margin="0,5,0,5" Orientation="Horizontal" Visibility="Collapsed">
+                        <TextBlock x:Name="TxtAvatarLetter"
+                                FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="0,0,15,0">
+                        </TextBlock>
+                        <Button Content="Wyloguj"
+                                Click="Logout_Click"/>
+                    </StackPanel>
+                </StackPanel>
 
-              <Border x:Name="AvatarButton"
+        <!--      <Border x:Name="AvatarButton"
                     Width="70"
                     Height="70"
                     CornerRadius="35"
@@ -210,9 +262,8 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"/>
-            </Border>
-
-            <Border x:Name="DropdownMenu"
+            </Border> -->
+        <!--    <Border x:Name="DropdownMenu"
                     Background="White"
                     BorderBrush="LightGray"
                     BorderThickness="1"
@@ -227,7 +278,7 @@
                     <Button Content="Logout"
                             Click="Logout_Click"/>
                 </StackPanel>
-            </Border>
+            </Border> -->
            
             </StackPanel>
           

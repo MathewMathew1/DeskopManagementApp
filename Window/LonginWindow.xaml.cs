@@ -68,7 +68,7 @@ namespace ModernWpfApp
                 JwtStorage.SaveToken(result.token);
 
                 bool fetched = await Services.CurrentUserService.Instance.FetchCurrentUserAsync();
-                await OrdersStore.Instance.FetchPendingOrdersAsync();
+            //    await OrdersStore.Instance.FetchPendingOrdersAsync();
                 this.DialogResult = true;
                 this.Close();
             }

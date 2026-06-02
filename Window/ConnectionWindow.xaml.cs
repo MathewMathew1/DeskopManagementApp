@@ -24,7 +24,12 @@ namespace ModernWpfApp
             DataContext = this;
 
             // Load existing connection string if any
-            TxtConnectionString.Text = ConnectionService.Instance.ConnectionString;
+            // Do not show password :>
+            // TxtConnectionString.Text = ConnectionService.Instance.ConnectionString;
+            if(ConnectionService.Instance.ConnectionString == "")
+                TxtConnectionLabel.Text = "Add connection string (SQL server):";
+            else 
+                TxtConnectionLabel.Text = "Replace connection string (SQL server):";
 
             ConnectCommand = new AsyncRelayCommand(PerformConnectionAsync);
         }
@@ -38,12 +43,15 @@ namespace ModernWpfApp
             {
                 await ConnectionService.Instance.SaveAndConnectAsync(TxtConnectionString.Text);
                 
+                TxtError.Text = "Success.";
+                TxtError.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
                 this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
             {
                 TxtError.Text = ex.Message;
+                TxtError.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
             }
             finally
             {

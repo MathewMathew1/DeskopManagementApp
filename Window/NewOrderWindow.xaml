@@ -1,0 +1,386 @@
+﻿<Window x:Class="ModernWpfApp.NewOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:comp="clr-namespace:ModernWpfApp.Components.Order.OrderRow"
+        Title="Import zamówień"
+        SizeToContent="WidthAndHeight"
+        Background="#F0F2F5"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
+        PreviewMouseDown="Window_PreviewMouseDown">
+
+    <Window.Resources>
+    </Window.Resources>
+
+    <Grid Width="1800" Height="800">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="420"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <Button x:Name="BackToMenu"
+                    Content="Powrót do menu"
+                    Style="{StaticResource ModernButton}"
+                    Width="300"
+                    Height="40"
+                    Margin="0,5,0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Click="BackToMenu_Click"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <TextBlock Margin="5,0"
+                            TextWrapping="Wrap"
+                            HorizontalAlignment="Stretch">
+                        <Run Text="Oczekujące:" FontSize="10"/>    
+                        <Run Text="{Binding TotalOrderCount}"
+                                            FontWeight="Bold"
+                                            FontSize="12"/>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                        <TextBlock Text="Klient:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                        <ComboBox x:Name="TxtComboEklient" ItemsSource="{Binding cbKlienciByOrders}"
+                                SelectedItem="{Binding SelectedEKlient, Mode=TwoWay}"
+                                Width="250">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontWeight="Bold">
+                                            <Run Text="{Binding Firma}"/><Run Text=" ("/><Run Text="{Binding iCount}"/><Run Text=")"/>  
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="NextOrder"
+                        Content="Następne zamówienie"
+                        Style="{StaticResource ModernButton}"
+                        Width="120"
+                        Height="30"
+                        Margin="0,5,0,5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="8"
+                        Click="NextOrder_Click"/>
+                </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Canvas>
+                <StackPanel Canvas.Left="10" Canvas.Top="10" Orientation="Vertical">
+                    <TextBlock Text="Nr zamówienia" Foreground="#555" Margin="0,0,0,-2"/>
+                    <Border BorderThickness="1" BorderBrush="#000000" Width="450" Height="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <Button Content="Nowy numer" 
+                                        Style="{StaticResource ModernButton}"
+                                        Width="200"
+                                        Click="AddNewOrderNumber_Click"
+                                        Margin="5,5,5,5"/>
+                                <Button Content="Ostatni numer klienta" 
+                                        Style="{StaticResource ModernButton}"
+                                        Width="200"
+                                        Click="AddLastClientNumber_Click"
+                                        Margin="5,5,5,5"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Nr zamówienia:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtNrZam" Text="" Background="#fed677" AcceptsReturn="False" IsReadOnly="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="E-order Id:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtEOrderId" Text="" Background="#fed677" AcceptsReturn="False" IsReadOnly="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <TextBlock Text="Dane zamawiającego" Foreground="#555" Margin="0,0,0,-2"/>
+                    <Border BorderThickness="1" BorderBrush="#000000" Width="450" Height="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Klient:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtKlient" Text="Estetica" Background="#fed677" AcceptsReturn="False" IsReadOnly="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Background="#fed677" Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Podklient:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboPodklient" ItemsSource="{Binding cbKlienci}"
+                                        SelectedItem="{Binding SelectedPodklient, Mode=TwoWay}"
+                                        Width="250">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Firma}" FontWeight="Bold"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Data wysyłki:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtDataWysyłki" Text="" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Background="#fed677" Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Nr zamówienia klienta:" TextWrapping="Wrap" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtNrZamKlient" Text="" Height="60" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Background="#fed677" Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Adres dostawy:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtAdresDostawy" Text="" AcceptsReturn="True" Width="250" Height="50" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <TextBlock Text="" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboAdres" ItemsSource="{Binding cbAdresy}"
+                                        Width="250"
+                                        SelectionChanged="ComboAdres_SelectionChanged"
+                                        DropDownClosed="ComboAdres_DropDownClosed"
+                                        IsEditable="false"
+                                        IsReadOnly="true">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Zamówienie" Foreground="#555" Margin="0,0,0,-2"/>
+                    <Border BorderThickness="1" BorderBrush="#000000" Background="#fed677" Width="450" Height="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Typ produktu:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtTypProduktu" ItemsSource="{Binding TypyProduktow}"
+                                        Width="250"
+                                        SelectedIndex="0"
+                                        IsEditable="false"
+                                        SelectionChanged="CBTypProduktu_SelectionChanged"
+                                        DropDownClosed="CBTypProduktu_DropDownClosed"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" 
+                                Visibility="{Binding bShowKrzesla, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock Text="Model:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboModelKrzeslo" ItemsSource="{Binding cbKrzesla}"
+                                        Width="250"
+                                        IsEditable="true"
+                                        StaysOpenOnEdit="True"
+                                        IsReadOnly="false"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5"
+                                Visibility="{Binding bShowStoly, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock Text="Model:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboModelStol" ItemsSource="{Binding cbStoly}"
+                                        Width="250"
+                                        IsEditable="true"
+                                        StaysOpenOnEdit="True"
+                                        IsReadOnly="false"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Ilość:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtIlosc" PreviewTextInput="PreviewTextInteger4InputHandler" DataObject.Pasting="IntegerPasting4Handler" Text="" AcceptsReturn="false" Width="100" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Gat. drewna:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboDrewno" ItemsSource="{Binding cbDrewno}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Button x:Name="RejectOrder"
+                        Content="Odrzuć zamówienie"
+                        Style="{StaticResource ModernButton}"
+                        Width="300"
+                        Height="40"
+                        Background="#a02828"
+                        Margin="0,5,0,5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Click="RejectOrder_Click"/>
+                </StackPanel>
+                <StackPanel Canvas.Left="470" Canvas.Top="10" Orientation="Vertical">
+                    <TextBlock Text="Opis zamówienia" Foreground="#555" Margin="0,0,0,-2"/>
+                    <Border BorderThickness="1" BorderBrush="#000000" Width="450" Height="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Background="#fed677" Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Wysokość (niestandardowa):" Foreground="#555" Margin="5,0,5,0" Width="200"/>
+                                <TextBox x:Name="TxtWysokosc" PreviewTextInput="PreviewTextInteger4InputHandler" DataObject.Pasting="IntegerPasting4Handler" Text="" AcceptsReturn="false" Width="100" Margin="5,0,5,0" />
+                                <TextBlock Text="(cm)" Foreground="#555" Margin="5,0,5,0" Width="25"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Opis wyrobu:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtOpisWyrobu" Text="" Height="90" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Zmiany i dodatki:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtZmianyIDodatki" Text="" Height="90" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Notka od klienta:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtNotkaKlienta" Text="" Height="90" Background="#ffbf94" AcceptsReturn="False" IsReadOnly="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Kolor:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtKolor" Text="" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <TextBlock Text="" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboKolor" ItemsSource="{Binding cbKolory}"
+                                        Width="250"
+                                        SelectionChanged="ComboKolor_SelectionChanged"
+                                        DropDownClosed="ComboKolor_DropDownClosed"
+                                        LostKeyboardFocus="ComboKolor_LostFocus"
+                                        IsEditable="true"
+                                        IsReadOnly="false">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Olej/lakier:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="ComboTypOlej" ItemsSource="{Binding TypyOlej}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Typ tkaniny:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtTypTkaniny" ItemsSource="{Binding TypyTkaniny}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Tkanina:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtTkanina" Text="" AcceptsReturn="True" Height="50" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Dostawca tkaniny:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboDostawcaTkaniny" ItemsSource="{Binding cbDostawcaTkaniny}"
+                                        Width="250"
+                                        IsEditable="true"
+                                        StaysOpenOnEdit="True"
+                                        IsReadOnly="false"/>
+                            </StackPanel>
+                            <CheckBox Content="Powierzona/niestandardowa"
+                                    x:Name="CheckPowierzonaNiestandardowa"
+                                    IsEnabled="True"
+                                    IsChecked="False"
+                                    Margin="50,5,0,5"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Canvas.Left="930" Canvas.Top="10" Orientation="Vertical">
+                    <TextBlock Text="Detale" Foreground="#555" Margin="0,0,0,-2"/>
+                    <Border BorderThickness="1" BorderBrush="#000000" Width="450" Height="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Background="#fed677">
+                                <TextBlock Text="Ślizgacz:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboSlizgacz" ItemsSource="{Binding cbSlizgacze}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Kołatka:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboKolatka" ItemsSource="{Binding cbKolatka}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Gwoździki:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboGwozdziki" ItemsSource="{Binding cbGwozdziki}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Kółka:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboKolka" ItemsSource="{Binding cbKolka}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Brendowanie:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboBrendowanie" ItemsSource="{Binding cbBrendowanie}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Brendowanie (opis):" FontSize="10" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtBrendowanie" Text="" Height="40" AcceptsReturn="True" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Etykieta:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboEtykieta" ItemsSource="{Binding cbEtykieta}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Brylanciki:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtComboBrylanciki" ItemsSource="{Binding cbBrylanciki}"
+                                        Width="250"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>  
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Background="#fed677">
+                                <TextBlock Text="Pakowanie:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <ComboBox x:Name="TxtTypPakowania" ItemsSource="{Binding TypyPakowania}"
+                                        Width="250"
+                                        SelectedIndex="0"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Background="#b3ff85">
+                                <TextBlock Text="Wartość (szt. przed rabatem):" Foreground="#555" Margin="5,0,5,0" Width="170"/>
+                                <TextBox x:Name="TxtWartosc" PreviewTextInput="PreviewTextDecimal2InputHandler" DataObject.Pasting="DecimalPasting2Handler" Text="" AcceptsReturn="false" Width="150" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Background="#b3ff85">
+                                <TextBlock Text="Waluta:" Foreground="#555" Margin="5,0,5,0" Width="170"/>
+                                <ComboBox x:Name="TxtComboWaluta" ItemsSource="{Binding cbWaluty}"
+                                        Width="100"
+                                        SelectedIndex="0"
+                                        IsEditable="false"
+                                        IsReadOnly="true"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" Background="#b3ff85">
+                                <TextBlock Text="Rabat:" Foreground="#555" Margin="5,0,5,0" Width="170"/>
+                                <TextBox x:Name="TxtRabat" PreviewTextInput="PreviewTextInteger2InputHandler" DataObject.Pasting="IntegerPasting2Handler" Text="" AcceptsReturn="false" Width="100" Margin="5,0,5,0" />
+                                <TextBlock Text="(%)" Foreground="#555" Margin="5,0,5,0" Width="25"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                <TextBlock Text="Uwagi:" Foreground="#555" Margin="5,0,5,0" Width="100"/>
+                                <TextBox x:Name="TxtUwagi" Text="" Height="90" AcceptsReturn="False" Width="250" Margin="5,0,5,0" />
+                            </StackPanel>
+                            <Button x:Name="AddOrder"
+                                Content="Zatwierdź zamówienie"
+                                Style="{StaticResource ModernButton}"
+                                Width="300"
+                                Height="40"
+                                Margin="0,5,0,5"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Click="AddNewOrder_Click"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Canvas>
+        </Grid>
+    </Grid>
+</Window>
